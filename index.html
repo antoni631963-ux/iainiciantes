@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA Iniciantes — Aprenda IA de verdade, do zero ao aplicado</title>
+<meta name="description" content="Aprenda Inteligência Artificial do zero em português. 8 módulos práticos, comunidade ativa, resultados reais. +12.000 alunos.">
+<meta name="theme-color" content="#0d0d14">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+:root{
+  --bg:#0d0d14;--surface:#13131f;--card:#1a1a28;--border:#252535;
+  --teal:#00e5b0;--purple:#7c6fff;--red:#ff3b3b;--text:#f0f0f8;--muted:#6b7280;--muted2:#9ca3af;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;}
+
+/* GRID BG */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,13,20,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--text);text-decoration:none;}
+.logo span{color:var(--teal);}
+.nav-links{display:flex;gap:20px;list-style:none;}
+.nav-links a{color:var(--muted2);font-size:13px;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--teal);}
+.nav-cta{background:var(--teal);color:#000;font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;text-decoration:none;transition:opacity .2s;}
+.nav-cta:hover{opacity:.85;}
+.nav-mobile{display:none;}
+
+/* SECTIONS */
+section{position:relative;z-index:1;}
+.container{max-width:680px;margin:0 auto;padding:0 20px;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 20px 60px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--teal);color:var(--teal);font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;padding:6px 14px;border-radius:4px;margin-bottom:28px;}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero h1{font-family:'Space Mono',monospace;font-size:clamp(32px,8vw,52px);font-weight:700;line-height:1.15;margin-bottom:20px;}
+.hero h1 span{color:var(--teal);}
+.hero p{color:var(--muted2);font-size:16px;line-height:1.7;margin-bottom:36px;max-width:520px;}
+.btn-group{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#000;font-size:15px;font-weight:600;padding:14px 24px;border-radius:10px;text-decoration:none;transition:opacity .2s;width:fit-content;}
+.btn-primary:hover{opacity:.88;}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text);font-size:14px;font-weight:500;padding:12px 20px;border-radius:10px;border:1px solid var(--border);text-decoration:none;transition:all .2s;width:fit-content;}
+.btn-secondary:hover{border-color:var(--teal);color:var(--teal);}
+.social-proof{display:flex;align-items:center;gap:12px;}
+.avatars{display:flex;}
+.avatars span{width:32px;height:32px;border-radius:50%;background:var(--card);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;margin-left:-8px;}
+.avatars span:first-child{margin-left:0;}
+.proof-text{font-size:13px;color:var(--muted2);}
+.proof-text strong{color:var(--teal);}
+
+/* STATS */
+.stats{padding:60px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;}
+.stat-num{font-family:'Space Mono',monospace;font-size:clamp(36px,8vw,52px);font-weight:700;color:var(--teal);margin-bottom:4px;}
+.stat-lbl{font-size:13px;color:var(--muted2);}
+
+/* LABEL */
+.section-label{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;}
+.section-title{font-family:'Space Mono',monospace;font-size:clamp(24px,6vw,36px);font-weight:700;line-height:1.2;margin-bottom:12px;}
+.section-sub{color:var(--muted2);font-size:15px;line-height:1.6;margin-bottom:40px;}
+
+/* COMMUNITY */
+.community{padding:80px 0;}
+.community-links{display:flex;flex-direction:column;gap:12px;}
+.community-link{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-decoration:none;transition:all .2s;}
+.community-link:hover{border-color:var(--teal);transform:translateX(4px);}
+.community-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.community-info strong{display:block;color:var(--text);font-size:15px;margin-bottom:2px;}
+.community-info span{color:var(--muted2);font-size:13px;}
+.link-arrow{margin-left:auto;color:var(--muted);font-size:18px;}
+
+/* TRILHA */
+.trilha{padding:80px 0;}
+.phases{display:flex;flex-direction:column;gap:16px;}
+.phase-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;}
+.phase-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--teal);margin-bottom:12px;}
+.phase-icon{font-size:28px;margin-bottom:10px;display:block;}
+.phase-card h3{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;margin-bottom:8px;}
+.phase-card p{color:var(--muted2);font-size:14px;line-height:1.6;margin-bottom:14px;}
+.phase-badge{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:4px;border:1px solid;}
+.badge-free{color:var(--teal);border-color:var(--teal);}
+.badge-premium{color:var(--purple);border-color:var(--purple);}
+
+/* MÓDULOS */
+.modulos{padding:80px 0;}
+.modulos-list{display:flex;flex-direction:column;gap:10px;}
+.modulo-item{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
+.modulo-num{width:36px;height:36px;background:rgba(124,111,255,.15);border:1px solid rgba(124,111,255,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--purple);flex-shrink:0;}
+.modulo-info h4{font-size:15px;font-weight:600;margin-bottom:4px;}
+.modulo-info p{color:var(--muted2);font-size:13px;line-height:1.5;}
+
+/* YOUTUBE */
+.youtube{padding:80px 0;}
+.video-cards{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.video-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.video-thumb{background:linear-gradient(135deg,#1a1a3a,#0d0d20);height:180px;display:flex;align-items:center;justify-content:center;position:relative;}
+.video-thumb.green{background:linear-gradient(135deg,#0a2a1a,#051510);}
+.video-thumb.purple{background:linear-gradient(135deg,#1a0a2a,#0d0515);}
+.play-btn{width:52px;height:52px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.video-duration{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.8);color:#fff;font-size:11px;font-family:'Space Mono',monospace;padding:2px 6px;border-radius:4px;}
+.video-info{padding:14px 16px;}
+.video-info h4{font-size:14px;font-weight:600;margin-bottom:4px;}
+.video-info span{color:var(--muted2);font-size:12px;}
+.btn-youtube{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:14px;font-weight:600;padding:12px 22px;border-radius:10px;text-decoration:none;transition:opacity .2s;}
+.btn-youtube:hover{opacity:.88;}
+
+/* DEPOIMENTOS */
+.depoimentos{padding:80px 0;}
+.depo-list{display:flex;flex-direction:column;gap:14px;}
+.depo-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;}
+.stars{color:var(--teal);font-size:14px;margin-bottom:12px;letter-spacing:2px;}
+.depo-text{font-style:italic;color:var(--muted2);font-size:14px;line-height:1.7;margin-bottom:16px;}
+.depo-author{display:flex;align-items:center;gap:10px;}
+.depo-avatar{width:36px;height:36px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.depo-name{font-size:14px;font-weight:600;}
+.depo-role{font-size:12px;color:var(--muted2);}
+
+/* PARA QUEM */
+.paraquem{padding:80px 0;}
+.audience-cards{display:flex;flex-direction:column;gap:12px;}
+.audience-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.audience-icon{font-size:28px;margin-bottom:10px;display:block;}
+.audience-card h3{font-size:16px;font-weight:600;margin-bottom:6px;}
+.audience-card p{color:var(--muted2);font-size:13px;line-height:1.5;}
+
+/* PLANOS */
+.planos{padding:80px 0;}
+.plans-grid{display:flex;flex-direction:column;gap:16px;}
+.plan-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;}
+.plan-card.popular{border-color:var(--teal);position:relative;}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:#000;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;padding:4px 14px;border-radius:100px;}
+.plan-label{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--muted2);margin-bottom:12px;}
+.plan-price{font-family:'Space Mono',monospace;font-size:42px;font-weight:700;margin-bottom:4px;}
+.plan-price span{font-size:16px;color:var(--muted2);}
+.plan-yearly{font-size:12px;color:var(--muted2);margin-bottom:24px;}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.plan-features li{display:flex;align-items:center;gap:10px;font-size:14px;}
+.plan-features li.yes::before{content:'✓';color:var(--teal);font-weight:700;}
+.plan-features li.no{color:var(--muted);}
+.plan-features li.no::before{content:'–';color:var(--muted);}
+.btn-plan{display:block;text-align:center;font-size:14px;font-weight:600;padding:13px;border-radius:10px;text-decoration:none;transition:all .2s;}
+.btn-plan-free{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn-plan-free:hover{border-color:var(--teal);color:var(--teal);}
+.btn-plan-premium{background:var(--teal);color:#000;}
+.btn-plan-premium:hover{opacity:.88;}
+.guarantee{text-align:center;color:var(--muted2);font-size:13px;margin-top:10px;}
+
+/* FAQ */
+.faq{padding:80px 0;}
+.faq-list{display:flex;flex-direction:column;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:18px 0;cursor:pointer;font-size:15px;font-weight:500;}
+.faq-icon{color:var(--teal);font-size:20px;font-weight:300;flex-shrink:0;transition:transform .2s;}
+.faq-a{color:var(--muted2);font-size:14px;line-height:1.7;padding-bottom:18px;display:none;}
+.faq-item.open .faq-a{display:block;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+
+/* CTA FINAL */
+.cta-final{padding:80px 0;text-align:center;}
+.cta-final h2{font-family:'Space Mono',monospace;font-size:clamp(24px,6vw,36px);font-weight:700;line-height:1.3;margin-bottom:14px;}
+.cta-final p{color:var(--muted2);font-size:15px;margin-bottom:32px;}
+.cta-btns{display:flex;flex-direction:column;gap:12px;align-items:center;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 20px 32px;}
+.footer-inner{max-width:680px;margin:0 auto;}
+.footer-logo{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:8px;}
+.footer-logo span{color:var(--teal);}
+.footer-desc{color:var(--muted2);font-size:13px;line-height:1.6;margin-bottom:20px;}
+.footer-socials{display:flex;gap:12px;margin-bottom:32px;}
+.footer-social{width:38px;height:38px;background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;transition:all .2s;}
+.footer-social:hover{border-color:var(--teal);}
+.footer-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;}
+.footer-col h4{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;}
+.footer-col a{display:block;color:var(--muted2);font-size:13px;text-decoration:none;margin-bottom:8px;transition:color .2s;}
+.footer-col a:hover{color:var(--teal);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;flex-direction:column;gap:6px;}
+.footer-bottom p{color:var(--muted);font-size:12px;}
+
+/* PAGES (Sobre, Termos, Privacidade) */
+.page-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;overflow-y:auto;}
+.page-overlay.active{display:block;}
+.page-inner{max-width:680px;margin:0 auto;padding:80px 20px 60px;}
+.page-back{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:32px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
+.page-inner h1{font-family:'Space Mono',monospace;font-size:clamp(24px,6vw,32px);font-weight:700;margin-bottom:8px;}
+.page-inner .updated{color:var(--muted2);font-size:13px;margin-bottom:36px;}
+.page-inner h2{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;margin:32px 0 12px;color:var(--teal);}
+.page-inner h3{font-size:16px;font-weight:600;margin:20px 0 8px;}
+.page-inner p{color:var(--muted2);font-size:14px;line-height:1.8;margin-bottom:14px;}
+.page-inner ul{margin:8px 0 16px 0;list-style:none;}
+.page-inner ul li{color:var(--muted2);font-size:14px;line-height:1.7;padding:4px 0 4px 16px;position:relative;}
+.page-inner ul li::before{content:'→';position:absolute;left:0;color:var(--teal);}
+
+@media(min-width:600px){
+  .stats-grid{grid-template-columns:repeat(4,1fr);}
+  .plans-grid{flex-direction:row;}
+  .plan-card{flex:1;}
+  .btn-group{flex-direction:row;}
+  .cta-btns{flex-direction:row;justify-content:center;}
+  .footer-cols{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span>ia</span>iniciantes</a>
+  <ul class="nav-links">
+    <li><a href="#trilha">Trilha</a></li>
+    <li><a href="#modulos">Módulos</a></li>
+    <li><a href="#planos">Preços</a></li>
+    <li><a href="#" onclick="showPage('youtube-page')">YouTube</a></li>
+  </ul>
+  <a href="https://pay.kiwify.com.br/2caVtSi?afid=nmVojAau" class="nav-cta" target="_blank">Começar grátis</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">NOVA TURMA ABERTA</div>
+    <h1>Aprenda <span>IA de verdade</span> do zero ao aplicado</h1>
+    <p>Conteúdo prático, sem enrolação. Do prompt perfeito ao seu primeiro modelo — em português, no seu ritmo.</p>
+    <div class="btn-group">
+      <a href="https://chat.whatsapp.com/" class="btn-primary">💬 Entrar no grupo grátis</a>
+      <a href="#trilha" class="btn-secondary">Ver a trilha</a>
+    </div>
+    <div class="social-proof">
+      <div class="avatars">
+        <span>👩</span><span>👨</span><span>👩</span><span>👨</span>
+      </div>
+      <div class="proof-text"><strong>+12.000 pessoas</strong> já estão aprendendo</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div><div class="stat-num">12k+</div><div class="stat-lbl">Alunos ativos</div></div>
+      <div><div class="stat-num">48h</div><div class="stat-lbl">De conteúdo em vídeo</div></div>
+      <div><div class="stat-num">8</div><div class="stat-lbl">Módulos práticos</div></div>
+      <div><div class="stat-num">4.9★</div><div class="stat-lbl">Avaliação média</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community">
+  <div class="container">
+    <div class="section-label">NOS SIGA E ENTRE NA COMUNIDADE</div>
+    <div class="community-links">
+      <a href="https://chat.whatsapp.com/" class="community-link" target="_blank">
+        <div class="community-icon" style="background:rgba(0,229,176,.1)">💬</div>
+        <div class="community-info"><strong>WhatsApp</strong><span>Grupo gratuito</span></div>
+        <div class="link-arrow">→</div>
+      </a>
+      <a href="https://youtube.com/@iainiciantes" class="community-link" target="_blank">
+        <div class="community-icon" style="background:rgba(255,59,59,.1)">▶️</div>
+        <div class="community-info"><strong>YouTube</strong><span>Aulas gratuitas</span></div>
+        <div class="link-arrow">→</div>
+      </a>
+      <a href="https://instagram.com/iniciantesia" class="community-link" target="_blank">
+        <div class="community-icon" style="background:rgba(124,111,255,.1)">📷</div>
+        <div class="community-info"><strong>Instagram</strong><span>Dicas diárias</span></div>
+        <div class="link-arrow">→</div>
+      </a>
+      <a href="https://tiktok.com/@iainiciantes" class="community-link" target="_blank">
+        <div class="community-icon" style="background:rgba(255,255,255,.05)">🎵</div>
+        <div class="community-info"><strong>TikTok</strong><span>Vídeos rápidos</span></div>
+        <div class="link-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TRILHA -->
+<section class="trilha" id="trilha">
+  <div class="container">
+    <div class="section-label">TRILHA DE APRENDIZADO</div>
+    <h2 class="section-title">Do zero ao primeiro projeto real</h2>
+    <p class="section-sub">Três fases progressivas. Você aprende, pratica e sai com algo funcionando.</p>
+    <div class="phases">
+      <div class="phase-card">
+        <div class="phase-label">FASE 01</div>
+        <span class="phase-icon">🧠</span>
+        <h3>Fundamentos</h3>
+        <p>Entenda como a IA funciona de verdade — sem matemática pesada. Conceitos, história, e por que isso muda tudo.</p>
+        <span class="phase-badge badge-free">GRATUITO</span>
+      </div>
+      <div class="phase-card">
+        <div class="phase-label">FASE 02</div>
+        <span class="phase-icon">⚙️</span>
+        <h3>Ferramentas & Prompts</h3>
+        <p>Use ChatGPT, Claude, Gemini com profundidade. Engenharia de prompts e automações reais no trabalho.</p>
+        <span class="phase-badge badge-premium">PREMIUM</span>
+      </div>
+      <div class="phase-card">
+        <div class="phase-label">FASE 03</div>
+        <span class="phase-icon">🚀</span>
+        <h3>Projetos Aplicados</h3>
+        <p>Automatize processos, construa um assistente e entregue seu primeiro projeto com IA para o portfólio.</p>
+        <span class="phase-badge badge-premium">PREMIUM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section class="modulos" id="modulos">
+  <div class="container">
+    <div class="section-label">CONTEÚDO</div>
+    <h2 class="section-title">O que você vai aprender</h2>
+    <p class="section-sub">8 módulos, do básico ao avançado, em ordem que faz sentido.</p>
+    <div class="modulos-list">
+      <div class="modulo-item"><div class="modulo-num">01</div><div class="modulo-info"><h4>O que é IA e como ela aprende</h4><p>Redes neurais, machine learning e deep learning explicados sem jargão.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">02</div><div class="modulo-info"><h4>Grandes Modelos de Linguagem (LLMs)</h4><p>Como o ChatGPT e o Claude funcionam. Tokens, contexto, temperatura.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">03</div><div class="modulo-info"><h4>Engenharia de Prompts</h4><p>Técnicas avançadas: few-shot, chain-of-thought, personas e muito mais.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">04</div><div class="modulo-info"><h4>IA para Produtividade</h4><p>Automações reais no trabalho — documentos, e-mails, código, análise de dados.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">05</div><div class="modulo-info"><h4>Imagem, Áudio e Vídeo com IA</h4><p>Midjourney, Suno, RunwayML: crie conteúdo multimodal com qualidade.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">06</div><div class="modulo-info"><h4>Agentes e Automações</h4><p>Construa agentes que navegam na web, leem arquivos e tomam decisões.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">07</div><div class="modulo-info"><h4>Fine-tuning e RAG</h4><p>Treine um modelo com seus próprios dados. Retrieval-Augmented Generation na prática.</p></div></div>
+      <div class="modulo-item"><div class="modulo-num">08</div><div class="modulo-info"><h4>Projeto Final</h4><p>Desenvolva e publique um produto com IA do zero. Portfólio real para o mercado.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUTUBE -->
+<section class="youtube" id="youtube">
+  <div class="container">
+    <div class="section-label">YOUTUBE</div>
+    <h2 class="section-title">Aulas gratuitas todo mês</h2>
+    <p class="section-sub">Conteúdo real direto no YouTube — sem precisar se cadastrar em nada.</p>
+    <div class="video-cards">
+      <div class="video-card">
+        <div class="video-thumb"><div class="play-btn">▶</div><div class="video-duration">12:34</div></div>
+        <div class="video-info"><h4>O que é ChatGPT e como ele funciona de verdade</h4><span>142 mil views · Iniciantes</span></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb purple"><div class="play-btn">▶</div><div class="video-duration">08:21</div></div>
+        <div class="video-info"><h4>5 prompts que vão mudar seu trabalho amanhã</h4><span>89 mil views · Produtividade</span></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb green"><div class="play-btn">▶</div><div class="video-duration">19:55</div></div>
+        <div class="video-info"><h4>Crie um agente de IA do zero em 20 minutos</h4><span>67 mil views · Avançado</span></div>
+      </div>
+    </div>
+    <a href="https://youtube.com/@iainiciantes" class="btn-youtube" target="_blank">▶ Inscrever no canal</a>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos">
+  <div class="container">
+    <div class="section-label">DEPOIMENTOS</div>
+    <h2 class="section-title">O que dizem os alunos</h2>
+    <p class="section-sub">Pessoas reais, resultados reais.</p>
+    <div class="depo-list">
+      <div class="depo-card">
+        <div class="stars">★★★★★</div>
+        <p class="depo-text">"Em duas semanas já consegui automatizar metade do meu trabalho no RH. Nunca pensei que eu, sem saber programar, fosse conseguir."</p>
+        <div class="depo-author"><div class="depo-avatar">👩</div><div><div class="depo-name">Camila Rocha</div><div class="depo-role">Analista de RH · São Paulo</div></div></div>
+      </div>
+      <div class="depo-card">
+        <div class="stars">★★★★★</div>
+        <p class="depo-text">"O conteúdo é denso mas explicado de um jeito que dá pra absorver. Finalmente entendo o que é um LLM e como usar isso no meu negócio."</p>
+        <div class="depo-author"><div class="depo-avatar">👨</div><div><div class="depo-name">Rafael Mendes</div><div class="depo-role">Empreendedor · Belo Horizonte</div></div></div>
+      </div>
+      <div class="depo-card">
+        <div class="stars">★★★★★</div>
+        <p class="depo-text">"Fiz outros cursos de IA antes e sempre ficava perdido no jargão. Aqui é direto ao ponto. Já usei o que aprendi em 3 projetos reais."</p>
+        <div class="depo-author"><div class="depo-avatar">👨‍💻</div><div><div class="depo-name">Lucas Ferreira</div><div class="depo-role">Desenvolvedor · Recife</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM -->
+<section class="paraquem">
+  <div class="container">
+    <div class="section-label">PARA QUEM É</div>
+    <h2 class="section-title">Você está no lugar certo</h2>
+    <p class="section-sub">Não importa de onde você vem — aqui você encontra o seu ponto de entrada.</p>
+    <div class="audience-cards">
+      <div class="audience-card"><span class="audience-icon">👩‍💼</span><h3>Profissionais</h3><p>Quer usar IA no trabalho e não sabe por onde começar. Aprenda o que realmente importa, sem hype.</p></div>
+      <div class="audience-card"><span class="audience-icon">🎓</span><h3>Estudantes</h3><p>Quer entrar no mercado com habilidade diferenciada. IA está em todas as áreas — seja você quem domina.</p></div>
+      <div class="audience-card"><span class="audience-icon">🛠️</span><h3>Criadores & Devs</h3><p>Já programa ou cria conteúdo e quer integrar IA nos projetos. Do protótipo ao produto em produção.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section class="planos" id="planos">
+  <div class="container">
+    <div class="section-label">PLANOS</div>
+    <h2 class="section-title">Comece grátis, evolua quando quiser</h2>
+    <p class="section-sub" style="margin-bottom:32px"></p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-label">GRATUITO</div>
+        <div class="plan-price">R$0<span>/mês</span></div>
+        <div class="plan-yearly" style="color:var(--teal)">Para sempre grátis</div>
+        <ul class="plan-features">
+          <li class="yes">Módulo 1 completo</li>
+          <li class="yes">Grupo no WhatsApp</li>
+          <li class="yes">Canal do YouTube</li>
+          <li class="no">Módulos 2 a 8</li>
+          <li class="no">Certificado</li>
+          <li class="no">Suporte ao vivo</li>
+        </ul>
+        <a href="https://chat.whatsapp.com/" class="btn-plan btn-plan-free" target="_blank">Entrar no grupo grátis</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">MAIS POPULAR</div>
+        <div class="plan-label">PREMIUM</div>
+        <div class="plan-price">R$47<span>/mês</span></div>
+        <div class="plan-yearly">ou R$397/ano — economize 30%</div>
+        <ul class="plan-features">
+          <li class="yes">Todos os 8 módulos</li>
+          <li class="yes">Grupo VIP no WhatsApp</li>
+          <li class="yes">Projetos guiados</li>
+          <li class="yes">Certificado reconhecido</li>
+          <li class="yes">Lives semanais</li>
+          <li class="yes">Novas aulas todo mês</li>
+        </ul>
+        <a href="https://pay.kiwify.com.br/2caVtSi?afid=nmVojAau" class="btn-plan btn-plan-premium" target="_blank">💳 Pagar com Mercado Pago</a>
+        <div class="guarantee">🔒 <strong>7 dias</strong> de garantia — devolução total</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Perguntas frequentes</h2>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Preciso saber programar para aprender?<span class="faq-icon">+</span></div><div class="faq-a">Não. O curso foi feito para quem não tem nenhuma base técnica. Começamos do zero e usamos linguagem simples em tudo.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Quanto tempo por semana preciso dedicar?<span class="faq-icon">+</span></div><div class="faq-a">2 a 4 horas por semana já é suficiente para avançar bem. O conteúdo é assíncrono — você estuda no seu ritmo.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">As aulas são ao vivo?<span class="faq-icon">+</span></div><div class="faq-a">Os módulos são gravados para você assistir quando quiser. Premium inclui lives semanais ao vivo para tirar dúvidas.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Tem suporte pelo WhatsApp?<span class="faq-icon">+</span></div><div class="faq-a">Sim. Alunos premium têm acesso ao grupo VIP no WhatsApp com suporte direto e comunidade ativa.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Posso cancelar quando quiser?<span class="faq-icon">+</span></div><div class="faq-a">Sim. Sem multa, sem burocracia. Você cancela a qualquer momento pela plataforma.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">E se eu não gostar?<span class="faq-icon">+</span></div><div class="faq-a">Você tem 7 dias de garantia total. Se não gostar por qualquer motivo, devolvemos 100% do valor pago, sem perguntas.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="container">
+    <div class="section-label">COMECE AGORA</div>
+    <h2>IA não vai substituir você.<br>Vai substituir quem não aprendeu.</h2>
+    <p>Junte-se a mais de 12.000 pessoas que já começaram — de graça.</p>
+    <div class="cta-btns">
+      <a href="https://chat.whatsapp.com/" class="btn-primary" target="_blank">💬 Entrar no grupo grátis</a>
+      <a href="https://youtube.com/@iainiciantes" class="btn-youtube" target="_blank">▶ Ver aulas no YouTube</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span>ia</span>iniciantes</div>
+    <p class="footer-desc">Aprenda Inteligência Artificial do zero em português. Conteúdo prático, comunidade ativa, resultados reais.</p>
+    <div class="footer-socials">
+      <a class="footer-social" href="https://chat.whatsapp.com/" target="_blank">💬</a>
+      <a class="footer-social" href="https://youtube.com/@iainiciantes" target="_blank">▶️</a>
+      <a class="footer-social" href="https://instagram.com/iniciantesia" target="_blank">📷</a>
+      <a class="footer-social" href="https://tiktok.com/@iainiciantes" target="_blank">🎵</a>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col"><h4>Plataforma</h4><a href="#trilha">Trilha</a><a href="#modulos">Módulos</a><a href="#planos">Preços</a><a href="https://youtube.com/@iainiciantes" target="_blank">YouTube</a></div>
+      <div class="footer-col"><h4>Empresa</h4><a href="#" onclick="showPage('sobre-page')">Sobre nós</a><a href="#" onclick="showPage('blog-page')">Blog</a><a href="#" onclick="showPage('termos-page')">Termos de uso</a><a href="#" onclick="showPage('privacidade-page')">Privacidade</a></div>
+      <div class="footer-col"><h4>Contato</h4><a href="mailto:contato@iainiciantes.com.br">contato@iainiciantes.com.br</a><a href="tel:+5517981164362">(17) 98116-4362</a></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 IA Iniciantes — iainiciantes.com.br</p>
+      <p>Pagamentos via 💳 Mercado Pago · Feito no Brasil 🇧🇷</p>
+    </div>
+  </div>
+</footer>
+
+<!-- PÁGINA: SOBRE NÓS -->
+<div class="page-overlay" id="sobre-page">
+  <div class="page-inner">
+    <button class="page-back" onclick="hidePage('sobre-page')">← Voltar</button>
+    <h1>Sobre o IA Iniciantes</h1>
+    <p class="updated">Fundado em 2024 · iainiciantes.com.br</p>
+    <p>O <strong>IA Iniciantes</strong> nasceu com uma missão simples: tornar a Inteligência Artificial acessível para todos os brasileiros, independentemente do nível de conhecimento técnico.</p>
+    <p>Acreditamos que a IA não é assunto apenas para programadores ou especialistas. É uma ferramenta poderosa que pode transformar a vida de qualquer pessoa — do estudante ao profissional, do empreendedor ao aposentado.</p>
+    <h2>Nossa Missão</h2>
+    <p>Democratizar o conhecimento em Inteligência Artificial no Brasil, oferecendo conteúdo prático, acessível e em português, para que qualquer pessoa possa aprender, aplicar e se beneficiar das ferramentas de IA no dia a dia.</p>
+    <h2>O que oferecemos</h2>
+    <ul>
+      <li>Trilhas de aprendizado — do zero ao avançado, no seu ritmo</li>
+      <li>8 módulos práticos — conteúdo aplicado ao mundo real</li>
+      <li>Comunidade ativa no WhatsApp — aprenda junto com outros iniciantes</li>
+      <li>Aulas gratuitas no YouTube — sem precisar se cadastrar</li>
+      <li>Atualizações constantes — sempre alinhado com as novidades da IA</li>
+    </ul>
+    <h2>Nosso Fundador</h2>
+    <p><strong>Antonio Tarnos Salinas</strong> é empreendedor brasileiro apaixonado por tecnologia e educação. Antonio fundou o IA Iniciantes após perceber que a grande maioria dos brasileiros estava sendo deixada para trás na revolução da Inteligência Artificial — não por falta de interesse, mas por falta de conteúdo acessível em português.</p>
+    <p style="font-style:italic;color:var(--teal)">"Quero que qualquer brasileiro, em qualquer canto do país, possa aprender a usar IA para melhorar sua vida e seus negócios."</p>
+    <h2>Nossos Números</h2>
+    <ul>
+      <li>+12.000 alunos ativos na plataforma</li>
+      <li>48h de conteúdo em vídeo</li>
+      <li>8 módulos do básico ao avançado</li>
+      <li>4.9★ de avaliação média</li>
+    </ul>
+    <h2>Contato</h2>
+    <ul>
+      <li>📧 contato@iainiciantes.com.br</li>
+      <li>📱 (17) 98116-4362</li>
+      <li>🌐 iainiciantes.com.br</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PÁGINA: TERMOS DE USO -->
+<div class="page-overlay" id="termos-page">
+  <div class="page-inner">
+    <button class="page-back" onclick="hidePage('termos-page')">← Voltar</button>
+    <h1>Termos de Uso</h1>
+    <p class="updated">Última atualização: setembro de 2026</p>
+    <p>Ao acessar e utilizar iainiciantes.com.br, você concorda com os termos e condições descritos abaixo.</p>
+    <h2>1. Aceitação dos Termos</h2>
+    <p>Ao se cadastrar, acessar ou utilizar qualquer serviço do IA Iniciantes, você declara que leu, compreendeu e concorda com estes Termos de Uso.</p>
+    <h2>2. Descrição dos Serviços</h2>
+    <ul>
+      <li>Cursos e conteúdos educacionais sobre Inteligência Artificial</li>
+      <li>Trilhas de aprendizado em português</li>
+      <li>Acesso a materiais, ferramentas e recursos complementares</li>
+      <li>Comunidade de aprendizado no WhatsApp</li>
+    </ul>
+    <h2>3. Cadastro e Conta</h2>
+    <p>Para acessar conteúdos pagos, é necessário criar uma conta fornecendo informações verdadeiras. Você é responsável por manter a confidencialidade de sua senha.</p>
+    <h2>4. Pagamentos e Reembolsos</h2>
+    <p>Os pagamentos são processados pelo <strong>Mercado Pago</strong>. Você tem direito a reembolso integral em até <strong>7 dias corridos</strong> após a compra, conforme o Código de Defesa do Consumidor. Para solicitar, entre em contato pelo e-mail contato@iainiciantes.com.br.</p>
+    <h2>5. Propriedade Intelectual</h2>
+    <p>Todo o conteúdo é de propriedade exclusiva do IA Iniciantes e está protegido pelas leis de direito autoral. É proibido reproduzir, distribuir ou comercializar qualquer conteúdo sem autorização prévia.</p>
+    <h2>6. Uso Permitido</h2>
+    <ul>
+      <li>É proibido compartilhar credenciais de acesso com terceiros</li>
+      <li>É proibido reproduzir ou redistribuir conteúdos da plataforma</li>
+      <li>É proibido usar a plataforma para fins ilegais</li>
+    </ul>
+    <h2>7. Limitação de Responsabilidade</h2>
+    <p>O IA Iniciantes não se responsabiliza por resultados específicos obtidos com o uso dos conhecimentos adquiridos. Os resultados dependem do esforço e aplicação de cada aluno.</p>
+    <h2>8. Lei Aplicável</h2>
+    <p>Estes Termos são regidos pelas leis brasileiras. Fica eleito o foro da comarca de São Paulo/SP.</p>
+    <h2>9. Contato</h2>
+    <ul>
+      <li>📧 contato@iainiciantes.com.br</li>
+      <li>📱 (17) 98116-4362</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PÁGINA: PRIVACIDADE -->
+<div class="page-overlay" id="privacidade-page">
+  <div class="page-inner">
+    <button class="page-back" onclick="hidePage('privacidade-page')">← Voltar</button>
+    <h1>Política de Privacidade</h1>
+    <p class="updated">Última atualização: setembro de 2026</p>
+    <p>O <strong>IA Iniciantes</strong> está comprometido com a proteção da privacidade em conformidade com a <strong>LGPD (Lei nº 13.709/2018)</strong>.</p>
+    <h2>1. Quais dados coletamos</h2>
+    <ul>
+      <li>Dados de cadastro: nome, e-mail, telefone</li>
+      <li>Dados de pagamento: processados pelo Mercado Pago</li>
+      <li>Dados de uso: páginas visitadas, progresso nos cursos</li>
+      <li>Dados técnicos: IP, tipo de navegador, dispositivo</li>
+    </ul>
+    <h2>2. Como usamos seus dados</h2>
+    <ul>
+      <li>Criar e gerenciar sua conta na plataforma</li>
+      <li>Processar pagamentos</li>
+      <li>Enviar comunicações sobre seus cursos</li>
+      <li>Melhorar a experiência de aprendizado</li>
+      <li>Cumprir obrigações legais</li>
+    </ul>
+    <h2>3. Compartilhamento</h2>
+    <p>Seus dados podem ser compartilhados com Mercado Pago (pagamentos) e ferramentas de e-mail. <strong>Não vendemos seus dados.</strong></p>
+    <h2>4. Seus direitos (LGPD)</h2>
+    <ul>
+      <li>Acessar seus dados pessoais</li>
+      <li>Corrigir dados incompletos ou desatualizados</li>
+      <li>Solicitar a exclusão dos dados</li>
+      <li>Revogar o consentimento a qualquer momento</li>
+      <li>Solicitar a portabilidade dos dados</li>
+    </ul>
+    <h2>5. Segurança</h2>
+    <p>Adotamos medidas técnicas para proteger seus dados. Os dados são armazenados em servidores seguros.</p>
+    <h2>6. Contato — DPO</h2>
+    <ul>
+      <li>📧 contato@iainiciantes.com.br</li>
+      <li>📱 (17) 98116-4362</li>
+    </ul>
+    <p>Respondemos em até <strong>15 dias úteis</strong> conforme a LGPD.</p>
+  </div>
+</div>
+
+<!-- PÁGINA: BLOG (placeholder) -->
+<div class="page-overlay" id="blog-page">
+  <div class="page-inner">
+    <button class="page-back" onclick="hidePage('blog-page')">← Voltar</button>
+    <h1>Blog</h1>
+    <p class="updated">Em breve</p>
+    <p>Nosso blog está sendo preparado com artigos práticos sobre IA para iniciantes. Em breve teremos conteúdo novo toda semana.</p>
+    <p>Enquanto isso, siga nosso <a href="https://youtube.com/@iainiciantes" style="color:var(--teal)" target="_blank">canal no YouTube</a> para aulas gratuitas toda semana.</p>
+  </div>
+</div>
+
+<script>
+function toggleFaq(el){
+  const item=el.parentElement;
+  item.classList.toggle('open');
+}
+function showPage(id){
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function hidePage(id){
+  document.getElementById(id).classList.remove('active');
+}
+</script>
+</body>
+</html>
