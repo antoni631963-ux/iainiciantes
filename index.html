@@ -12,6 +12,13 @@
   <meta property="og:url" content="https://iainiciantes.com.br" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00ffaa" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="IA Iniciantes" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <style>
     /* ── TOKENS ─────────────────────────────────────── */
     :root {
@@ -884,5 +891,16 @@
   });
   document.getElementById('hero').style.opacity = '1';
 </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('✅ SW registrado'))
+          .catch(e => console.log('SW erro:', e));
+      });
+    }
+  </script>
+
 </body>
 </html>
