@@ -407,6 +407,96 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
+
+    /* ── CHATBOT ─────────────────────────────────────────── */
+    .chat-fab {
+      position: fixed; bottom: 90px; right: 24px; z-index: 200;
+      background: linear-gradient(135deg,#4f46e5,#7c3aed);
+      color: #fff; width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; cursor: pointer; border: none;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .chat-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(124,58,237,0.6); }
+    .chat-window {
+      position: fixed; bottom: 160px; right: 24px; z-index: 201;
+      width: 340px; max-width: calc(100vw - 32px);
+      background: #0d1220; border: 1px solid rgba(0,255,170,0.18);
+      border-radius: 18px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      display: none; flex-direction: column;
+      max-height: 520px;
+    }
+    .chat-window.open { display: flex; }
+    .chat-header {
+      background: linear-gradient(135deg,#4f46e5,#7c3aed);
+      padding: 14px 18px; display: flex; align-items: center;
+      justify-content: space-between;
+    }
+    .chat-header-info { display: flex; align-items: center; gap: 10px; }
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .chat-header h4 { color: #fff; font-size: 14px; font-weight: 700; margin: 0; }
+    .chat-header p { color: rgba(255,255,255,0.7); font-size: 11px; margin: 2px 0 0; }
+    .chat-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; cursor: pointer; line-height: 1; }
+    .chat-close:hover { color: #fff; }
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 2px; }
+    .msg { max-width: 85%; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+    .msg.bot { align-self: flex-start; }
+    .msg.user { align-self: flex-end; }
+    .msg-bubble {
+      padding: 10px 14px; border-radius: 14px;
+      font-size: 13px; line-height: 1.55;
+    }
+    .msg.bot .msg-bubble { background: #1e293b; color: #e2e8f0; border-radius: 4px 14px 14px 14px; }
+    .msg.user .msg-bubble { background: #00ffaa; color: #070b14; font-weight: 600; border-radius: 14px 4px 14px 14px; }
+    .chat-options { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+    .chat-opt {
+      background: none; border: 1px solid rgba(0,255,170,0.3);
+      color: #00ffaa; padding: 8px 12px; border-radius: 10px;
+      font-size: 13px; font-family: var(--sans); cursor: pointer;
+      text-align: left; transition: background 0.15s, border-color 0.15s;
+    }
+    .chat-opt:hover { background: rgba(0,255,170,0.08); border-color: #00ffaa; }
+    .chat-input-row {
+      display: flex; gap: 8px; padding: 12px 16px;
+      border-top: 1px solid rgba(0,255,170,0.1);
+    }
+    .chat-input {
+      flex: 1; background: #1e293b; border: 1px solid rgba(0,255,170,0.15);
+      color: #e2e8f0; border-radius: 10px; padding: 9px 12px;
+      font-size: 13px; font-family: var(--sans); outline: none;
+    }
+    .chat-input:focus { border-color: rgba(0,255,170,0.4); }
+    .chat-input::placeholder { color: #475569; }
+    .chat-send {
+      background: #00ffaa; color: #070b14; border: none;
+      border-radius: 10px; width: 36px; height: 36px;
+      font-size: 16px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .chat-send:hover { opacity: 0.85; }
+    .typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+    .typing span {
+      width: 7px; height: 7px; background: #4f46e5;
+      border-radius: 50%; animation: bounce 1s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
   </style>
 </head>
 <body>
@@ -900,6 +990,236 @@
           .catch(e => console.log('SW erro:', e));
       });
     }
+  </script>
+
+
+  <!-- CHATBOT -->
+  <button class="chat-fab" onclick="toggleChat()" aria-label="Chat">🤖</button>
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">🤖</div>
+        <div>
+          <h4>IA Assistente</h4>
+          <p>● Online agora</p>
+        </div>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">×</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-row" id="chatInputRow" style="display:none">
+      <input class="chat-input" id="chatInput" placeholder="Digite sua resposta..." onkeydown="if(event.key==='Enter')sendMsg()" />
+      <button class="chat-send" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+
+  <script>
+  // ── CHATBOT ENGINE ──────────────────────────────────────
+  const FLOWS = {
+    start: {
+      msgs: ["👋 Olá! Bem-vindo ao *IA Iniciantes*!", "Como posso te ajudar hoje?"],
+      options: [
+        { label: "🎓 Conhecer os cursos", next: "cursos" },
+        { label: "💰 Ver planos e preços", next: "precos" },
+        { label: "❓ Tenho uma dúvida", next: "duvidas" },
+        { label: "📞 Falar com o Antonio", next: "humano" }
+      ]
+    },
+    cursos: {
+      msgs: ["📚 Temos *8 módulos* do básico ao avançado:
+
+🧠 Módulo 1 — O que é IA (GRÁTIS)
+💬 Módulo 2 — ChatGPT (GRÁTIS)
+🖼️ Módulo 3 — IA para imagens
+🎥 Módulo 4 — IA para vídeo
+⚙️ Módulo 5 — Automação
+💼 Módulo 6 — IA nos negócios
+🛡️ Módulo 7 — Ética
+🔮 Módulo 8 — Futuro da IA
+
+Tudo em português! 🇧🇷"],
+      options: [
+        { label: "💰 Ver preços", next: "precos" },
+        { label: "🚀 Quero me inscrever", next: "cadastro_nome" },
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    },
+    precos: {
+      msgs: ["💳 Nossos planos:
+
+🆓 *GRATUITO*
+✅ Módulos 1 e 2
+✅ Comunidade WhatsApp
+✅ Sem cartão
+
+⭐ *PREMIUM — R$97/mês*
+✅ Todos os 8 módulos
+✅ Suporte direto
+✅ Aulas ao vivo
+✅ Certificado
+✅ Cancele quando quiser"],
+      options: [
+        { label: "🆓 Criar conta grátis", next: "cadastro_nome" },
+        { label: "⭐ Assinar Premium", next: "premium" },
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    },
+    premium: {
+      msgs: ["⭐ Excelente escolha!", "Clique abaixo para assinar com segurança via Kiwify. Após o pagamento você recebe o acesso imediatamente! 📧", "👉 https://pay.kiwify.com.br/X9Vt3oL"],
+      options: [
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    },
+    cadastro_nome: {
+      msgs: ["Ótimo! Para criar sua conta, preciso do seu nome 😊"],
+      input: { placeholder: "Digite seu nome...", varName: "userName", next: "cadastro_email" }
+    },
+    cadastro_email: {
+      msgs: ["Qual é o seu e-mail?"],
+      input: { placeholder: "seu@email.com", varName: "userEmail", next: "cadastro_ok" }
+    },
+    cadastro_ok: {
+      msgs: ["✅ Perfeito! Sua conta foi registrada.", "Acesse agora e comece de graça:
+👉 https://iainiciantes.com.br
+
+Bom aprendizado! 🚀"],
+      options: [
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    },
+    duvidas: {
+      msgs: ["❓ Perguntas frequentes:
+
+1️⃣ Preciso saber inglês? Não! Tudo em português 🇧🇷
+2️⃣ Preciso saber programar? Não!
+3️⃣ Posso cancelar? Sim, sem multa
+4️⃣ Tem certificado? Sim, no Premium
+
+Sua dúvida foi respondida?"],
+      options: [
+        { label: "✅ Sim, obrigado!", next: "obrigado" },
+        { label: "📞 Ainda preciso de ajuda", next: "humano" },
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    },
+    humano: {
+      msgs: ["👨‍💼 Vou te conectar com o Antonio!", "📱 WhatsApp: https://wa.me/5517981164362
+📧 E-mail: contatoiainiciantes@gmail.com
+
+Horário: Seg a Sex, 9h às 18h 😊"],
+      options: [
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    },
+    obrigado: {
+      msgs: ["😊 Fico feliz em ter ajudado!", "Nos vemos na plataforma! 🚀
+👉 iainiciantes.com.br"],
+      options: [
+        { label: "🏠 Voltar ao menu", next: "start" }
+      ]
+    }
+  };
+
+  let chatOpen = false;
+  let started = false;
+  let currentInput = null;
+  const vars = {};
+
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    document.getElementById('chatWindow').classList.toggle('open', chatOpen);
+    if (chatOpen && !started) { started = true; setTimeout(() => runFlow('start'), 300); }
+  }
+
+  function addMsg(text, type='bot') {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg ' + type;
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = text.replace(/\n/g,'<br>').replace(/\*(.*?)\*/g,'<strong>$1</strong>');
+    div.appendChild(bubble);
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  }
+
+  function addTyping() {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg bot'; div.id = 'typing';
+    div.innerHTML = '<div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  function showOptions(options) {
+    const msgs = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg bot'; div.id = 'optionsDiv';
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-options';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'chat-opt';
+      btn.textContent = opt.label;
+      btn.onclick = () => {
+        div.remove();
+        addMsg(opt.label, 'user');
+        setTimeout(() => runFlow(opt.next), 400);
+      };
+      wrap.appendChild(btn);
+    });
+    div.appendChild(wrap);
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function showInput(inputConfig) {
+    currentInput = inputConfig;
+    const row = document.getElementById('chatInputRow');
+    const inp = document.getElementById('chatInput');
+    inp.placeholder = inputConfig.placeholder;
+    inp.value = '';
+    row.style.display = 'flex';
+    inp.focus();
+  }
+
+  function sendMsg() {
+    const inp = document.getElementById('chatInput');
+    const val = inp.value.trim();
+    if (!val || !currentInput) return;
+    addMsg(val, 'user');
+    vars[currentInput.varName] = val;
+    const next = currentInput.next;
+    currentInput = null;
+    document.getElementById('chatInputRow').style.display = 'none';
+    inp.value = '';
+    setTimeout(() => runFlow(next), 400);
+  }
+
+  async function runFlow(flowId) {
+    const flow = FLOWS[flowId];
+    if (!flow) return;
+    const opts = document.getElementById('optionsDiv');
+    if (opts) opts.remove();
+    for (let i = 0; i < flow.msgs.length; i++) {
+      addTyping();
+      await new Promise(r => setTimeout(r, 600 + flow.msgs[i].length * 8));
+      removeTyping();
+      let msg = flow.msgs[i];
+      if (vars.userName) msg = msg.replace('{{nome}}', vars.userName);
+      addMsg(msg);
+      if (i < flow.msgs.length - 1) await new Promise(r => setTimeout(r, 300));
+    }
+    if (flow.options) showOptions(flow.options);
+    else if (flow.input) showInput(flow.input);
+  }
   </script>
 
 </body>
