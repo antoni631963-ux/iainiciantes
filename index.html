@@ -907,166 +907,182 @@
   
 
 
-<!-- CHAT -->
+<!-- CHAT v4 -->
 <style>
-#cfab{position:fixed;bottom:156px;right:20px;z-index:9999;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.5)}
-#cwin{display:none;position:fixed;bottom:222px;right:20px;z-index:9998;width:320px;max-width:calc(100vw - 32px);background:#0d1220;border:1px solid rgba(0,255,170,0.2);border-radius:16px;flex-direction:column;height:420px;box-shadow:0 20px 60px rgba(0,0,0,0.6);overflow:hidden}
-#cwin.on{display:flex!important}
+#cfab{position:fixed;bottom:156px;right:20px;z-index:9999;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,0.5);line-height:1}
+#cwin{display:none;position:fixed;bottom:222px;right:20px;z-index:9998;width:320px;max-width:calc(100vw - 32px);background:#0d1220;border:1px solid rgba(0,255,170,0.25);border-radius:16px;flex-direction:column;height:400px;box-shadow:0 20px 60px rgba(0,0,0,0.7);overflow:hidden}
 #chdr{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-#chdr span{color:#fff;font-weight:700;font-size:14px}
-#cclx{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
-#cmsgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
-.cb{max-width:85%;padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.5}
-.cbot{align-self:flex-start;background:#1e293b;color:#e2e8f0}
-.cusr{align-self:flex-end;background:#00ffaa;color:#070b14;font-weight:600}
-.copt{display:flex;flex-direction:column;gap:5px;width:90%;align-self:flex-start}
-.cob{background:none;border:1px solid rgba(0,255,170,0.35);color:#00ffaa;padding:8px 12px;border-radius:10px;font-size:12px;cursor:pointer;text-align:left}
-#cinr{padding:10px;border-top:1px solid rgba(0,255,170,0.1);gap:8px;flex-shrink:0}
-#cinp{flex:1;background:#1e293b;border:1px solid rgba(0,255,170,0.2);color:#e2e8f0;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;width:calc(100% - 46px)}
-#csnd{background:#00ffaa;color:#070b14;border:none;border-radius:8px;width:34px;height:34px;font-size:15px;cursor:pointer;vertical-align:middle}
+#chdr b{color:#fff;font-size:13px}
+#cclx{background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+#cscreen{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cm{padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.55;max-width:88%}
+.cm.b{background:#1e293b;color:#e2e8f0;align-self:flex-start;border-radius:4px 12px 12px 12px}
+.cm.u{background:#00ffaa;color:#070b14;font-weight:700;align-self:flex-end;border-radius:12px 4px 12px 12px}
+.copts{display:flex;flex-direction:column;gap:6px;align-self:flex-start;width:90%}
+.co{background:none;border:1.5px solid rgba(0,255,170,0.4);color:#00ffaa;padding:9px 12px;border-radius:10px;font-size:12px;cursor:pointer;text-align:left;transition:.15s;font-family:inherit}
+.co:active{background:rgba(0,255,170,0.15)}
+.cinrow{padding:10px 12px;border-top:1px solid rgba(0,255,170,0.1);display:none;gap:8px;flex-shrink:0;align-items:center}
+.ci{flex:1;background:#1e293b;border:1px solid rgba(0,255,170,0.2);color:#e2e8f0;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;font-family:inherit}
+.cs{background:#00ffaa;color:#070b14;border:none;border-radius:8px;width:34px;height:34px;font-size:14px;cursor:pointer;flex-shrink:0}
 </style>
 
 <button id="cfab">🤖</button>
 <div id="cwin">
   <div id="chdr">
-    <span>🤖 IA Assistente • Online</span>
-    <button id="cclx">×</button>
+    <b>🤖 IA Assistente • Online</b>
+    <button id="cclx">✕</button>
   </div>
-  <div id="cmsgs"></div>
-  <div id="cinr" style="display:none">
-    <input id="cinp" placeholder="Digite aqui..."/>
-    <button id="csnd">➤</button>
+  <div id="cscreen"></div>
+  <div class="cinrow" id="cinrow">
+    <input class="ci" id="cinp" placeholder="Digite aqui..."/>
+    <button class="cs" id="csnd">➤</button>
   </div>
 </div>
 
 <script>
-(function(){
-var cv={}, cc=null, started=false;
+var _s=document.getElementById('cscreen');
+var _w=document.getElementById('cwin');
+var _r=document.getElementById('cinrow');
+var _i=document.getElementById('cinp');
+var _started=false;
+var _cc=null;
+var _cv={};
 
-var fab=document.getElementById('cfab');
-var win=document.getElementById('cwin');
-var clx=document.getElementById('cclx');
-var msgs=document.getElementById('cmsgs');
-var cinr=document.getElementById('cinr');
-var cinp=document.getElementById('cinp');
-var csnd=document.getElementById('csnd');
-
-fab.addEventListener('click', function(){
-  win.classList.toggle('on');
-  if(win.classList.contains('on') && !started){
-    started=true;
-    setTimeout(function(){ flow('start'); }, 200);
+document.getElementById('cfab').onclick=function(){
+  if(_w.style.display==='flex'){
+    _w.style.display='none';
+  } else {
+    _w.style.display='flex';
+    if(!_started){_started=true;_go('start');}
   }
-});
+};
+document.getElementById('cclx').onclick=function(){_w.style.display='none';};
+document.getElementById('csnd').onclick=_send;
+document.getElementById('cinp').onkeydown=function(e){if(e.key==='Enter')_send();};
 
-clx.addEventListener('click', function(){ win.classList.remove('on'); });
-
-csnd.addEventListener('click', send);
-cinp.addEventListener('keydown', function(e){ if(e.key==='Enter') send(); });
-
-var F={
-  start:{m:["👋 Olá! Bem-vindo ao IA Iniciantes!","Como posso te ajudar?"],o:[["🎓 Ver os cursos","cursos"],["💰 Planos e preços","precos"],["❓ Dúvidas frequentes","duvidas"],["📞 Falar com Antonio","humano"]]},
-  cursos:{m:["📚 Temos 8 módulos:
+var _F={
+  start:{
+    m:['👋 Olá! Bem-vindo ao IA Iniciantes!','Como posso te ajudar?'],
+    o:[['🎓 Ver os cursos','cursos'],['💰 Planos e preços','precos'],['❓ Dúvidas','duvidas'],['📞 Falar com Antonio','humano']]
+  },
+  cursos:{
+    m:['📚 8 módulos em português:
 🧠 Módulo 1 - O que é IA (GRÁTIS)
 💬 Módulo 2 - ChatGPT (GRÁTIS)
-🖼️ Módulo 3 - IA para imagens
-🎥 Módulo 4 - Vídeo e voz
+🖼️ Módulo 3 - Imagens
+🎥 Módulo 4 - Vídeo
 ⚙️ Módulo 5 - Automação
 💼 Módulo 6 - Negócios
 🛡️ Módulo 7 - Ética
-🔮 Módulo 8 - Futuro da IA
-Tudo em português! 🇧🇷"],o:[["💰 Ver preços","precos"],["🚀 Quero me inscrever","cnome"],["🏠 Menu","start"]]},
-  precos:{m:["💳 Planos:
+🔮 Módulo 8 - Futuro 🇧🇷'],
+    o:[['💰 Ver preços','precos'],['🚀 Quero me inscrever','cnome'],['🏠 Menu','start']]
+  },
+  precos:{
+    m:['💳 Nossos planos:
 
 🆓 GRATUITO
 ✅ Módulos 1 e 2
-✅ Comunidade WA
+✅ Comunidade WhatsApp
 
-⭐ PREMIUM R$97/mês
-✅ 8 módulos
+⭐ PREMIUM — R$97/mês
+✅ Todos os 8 módulos
 ✅ Suporte direto
-✅ Certificado"],o:[["🆓 Conta grátis","cnome"],["⭐ Assinar Premium","premium"],["🏠 Menu","start"]]},
-  premium:{m:["⭐ Ótima escolha!","Assine agora:
+✅ Certificado
+✅ Cancele quando quiser'],
+    o:[['🆓 Criar conta grátis','cnome'],['⭐ Assinar Premium','premium'],['🏠 Menu','start']]
+  },
+  premium:{
+    m:['⭐ Ótima escolha!','Clique para assinar:
 https://pay.kiwify.com.br/X9Vt3oL
 
-Acesso imediato! 📧"],o:[["🏠 Menu","start"]]},
-  cnome:{m:["Qual é o seu nome? 😊"],i:["Digite seu nome...","nome","cemail"]},
-  cemail:{m:["Qual é o seu e-mail?"],i:["seu@email.com","email","cok"]},
-  cok:{m:["✅ Cadastro feito!","Acesse:
+Acesso imediato após pagamento! 📧'],
+    o:[['🏠 Menu','start']]
+  },
+  cnome:{m:['Qual é o seu nome? 😊'],i:['Digite seu nome...','nome','cemail']},
+  cemail:{m:['Qual é o seu e-mail?'],i:['seu@email.com','email','cok']},
+  cok:{
+    m:['✅ Cadastro feito!','Acesse agora:
 https://iainiciantes.com.br
-Bom aprendizado! 🚀"],o:[["🏠 Menu","start"]]},
-  duvidas:{m:["❓ FAQ:
-1️⃣ Inglês? Não!
-2️⃣ Programar? Não!
-3️⃣ Cancelar? Sim!
-4️⃣ Certificado? Sim (Premium)"],o:[["✅ Obrigado!","tchau"],["📞 Falar com Antonio","humano"],["🏠 Menu","start"]]},
-  humano:{m:["👨‍💼 Antonio está disponível!","📱 https://wa.me/5517981164362
+Bom aprendizado! 🚀'],
+    o:[['🏠 Menu','start']]
+  },
+  duvidas:{
+    m:['❓ Perguntas frequentes:
+
+1️⃣ Preciso de inglês? Não!
+2️⃣ Preciso programar? Não!
+3️⃣ Posso cancelar? Sim, sem multa!
+4️⃣ Tem certificado? Sim (Premium)'],
+    o:[['✅ Obrigado!','tchau'],['📞 Falar com Antonio','humano'],['🏠 Menu','start']]
+  },
+  humano:{
+    m:['👨‍💼 Fale diretamente com Antonio:','📱 https://wa.me/5517981164362
 📧 contatoiainiciantes@gmail.com
-Seg-Sex 9h-18h"],o:[["🏠 Menu","start"]]},
-  tchau:{m:["😊 Até logo!","Nos vemos em:
-https://iainiciantes.com.br 🚀"],o:[["🏠 Menu","start"]]}
+Seg-Sex, 9h-18h 😊'],
+    o:[['🏠 Menu','start']]
+  },
+  tchau:{
+    m:['😊 Fico feliz em ter ajudado!','Nos vemos na plataforma! 🚀
+https://iainiciantes.com.br'],
+    o:[['🏠 Menu','start']]
+  }
 };
 
-function addMsg(t,cls){
+function _bot(t){
   var d=document.createElement('div');
-  d.className='cb '+cls;
+  d.className='cm b';
   d.innerHTML=t.replace(/\n/g,'<br>');
-  msgs.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
+  _s.appendChild(d);
+  _s.scrollTop=99999;
 }
 
-function showOpts(opts){
+function _usr(t){
+  var d=document.createElement('div');
+  d.className='cm u';
+  d.textContent=t;
+  _s.appendChild(d);
+  _s.scrollTop=99999;
+}
+
+function _opts(opts){
+  var old=document.getElementById('_od');
+  if(old)old.remove();
   var w=document.createElement('div');
-  w.className='copt'; w.id='optD';
+  w.className='copts';w.id='_od';
   opts.forEach(function(o){
     var b=document.createElement('button');
-    b.className='cob'; b.textContent=o[0];
+    b.className='co';b.textContent=o[0];
     b.onclick=function(){
-      var x=document.getElementById('optD'); if(x)x.remove();
-      addMsg(o[0],'cusr');
-      setTimeout(function(){ flow(o[1]); },300);
+      w.remove();
+      _usr(o[0]);
+      setTimeout(function(){_go(o[1]);},200);
     };
     w.appendChild(b);
   });
-  msgs.appendChild(w);
-  msgs.scrollTop=msgs.scrollHeight;
+  _s.appendChild(w);
+  _s.scrollTop=99999;
 }
 
-function showInput(cfg){
-  cc=cfg; cinp.placeholder=cfg[0]; cinp.value='';
-  cinr.style.display='flex';
-  setTimeout(function(){ cinp.focus(); },100);
+function _send(){
+  var v=_i.value.trim();
+  if(!v||!_cc)return;
+  _usr(v);
+  _cv[_cc[1]]=v;
+  var n=_cc[2];
+  _cc=null;
+  _r.style.display='none';
+  _i.value='';
+  setTimeout(function(){_go(n);},200);
 }
 
-function send(){
-  var v=cinp.value.trim();
-  if(!v||!cc) return;
-  addMsg(v,'cusr');
-  cv[cc[1]]=v;
-  var n=cc[2]; cc=null;
-  cinr.style.display='none'; cinp.value='';
-  setTimeout(function(){ flow(n); },300);
+function _go(id){
+  var f=_F[id];if(!f)return;
+  var old=document.getElementById('_od');if(old)old.remove();
+  _r.style.display='none';
+  f.m.forEach(function(m){_bot(m);});
+  if(f.o){_opts(f.o);}
+  else if(f.i){_cc=f.i;_i.placeholder=f.i[0];_i.value='';_r.style.display='flex';setTimeout(function(){_i.focus();},50);}
 }
-
-function flow(id){
-  var f=F[id]; if(!f) return;
-  var x=document.getElementById('optD'); if(x)x.remove();
-  cinr.style.display='none';
-  var d=0;
-  f.m.forEach(function(m,i){
-    setTimeout(function(){
-      addMsg(m,'cbot');
-      if(i===f.m.length-1){
-        setTimeout(function(){
-          if(f.o) showOpts(f.o);
-          else if(f.i) showInput(f.i);
-        },150);
-      }
-    },d);
-    d+=400;
-  });
-}
-})();
 </script>
 
 </body>
