@@ -891,6 +891,11 @@
     observer.observe(s);
   });
   document.getElementById('hero').style.opacity = '1';
+  // Garantir que elementos fixed nunca fiquem invisíveis
+  ['xfab','xwin','chatFab','chatWindow'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el){el.style.opacity='1';el.style.pointerEvents='auto';}
+  });
 </script>
 
   <script>
@@ -909,8 +914,8 @@
 
 <!-- BOT -->
 <style>
-#xfab{position:fixed;bottom:158px;right:22px;z-index:9999;width:52px;height:52px;border-radius:50%;background:#6d28d9;border:2px solid #7c3aed;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 0 20px rgba(109,40,217,0.6)}
-#xwin{position:fixed;bottom:222px;right:22px;z-index:9998;width:300px;max-width:calc(100vw - 28px);background:#111827;border:1px solid #374151;border-radius:14px;flex-direction:column;height:380px;box-shadow:0 8px 40px rgba(0,0,0,0.8);overflow:hidden;display:none}
+#xfab{position:fixed;bottom:158px;right:22px;z-index:9999;width:52px;height:52px;border-radius:50%;background:#6d28d9;border:2px solid #7c3aed;color:#fff;font-size:24px;cursor:pointer;box-shadow:0 0 20px rgba(109,40,217,0.6);pointer-events:auto!important;opacity:1!important;touch-action:manipulation}
+#xwin{position:fixed;bottom:222px;right:22px;z-index:9998;pointer-events:auto!important;opacity:1!important;touch-action:manipulation;width:300px;max-width:calc(100vw - 28px);background:#111827;border:1px solid #374151;border-radius:14px;flex-direction:column;height:380px;box-shadow:0 8px 40px rgba(0,0,0,0.8);overflow:hidden;display:none}
 #xhdr{background:#6d28d9;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
 #xhdr p{color:#fff;font-weight:700;font-size:13px;margin:0}
 #xhdr button{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 2px}
