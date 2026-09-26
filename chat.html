@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Chat — IA Iniciantes</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',sans-serif;background:#070b14;color:#e2e8f0;height:100vh;display:flex;flex-direction:column}
+#hdr{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+#hdr a{color:#fff;text-decoration:none;font-size:20px}
+#hdr h1{color:#fff;font-size:15px;font-weight:700}
+#hdr p{color:rgba(255,255,255,0.75);font-size:11px}
+#msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.b{padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.55;max-width:88%;word-break:break-word}
+.bot{background:#1e293b;color:#e2e8f0;align-self:flex-start;border-radius:4px 14px 14px 14px}
+.usr{background:#00ffaa;color:#070b14;font-weight:700;align-self:flex-end;border-radius:14px 4px 14px 14px}
+.opts{display:flex;flex-direction:column;gap:7px;align-self:flex-start;width:90%;margin-top:2px}
+.opt{background:none;border:1.5px solid rgba(0,255,170,0.4);color:#00ffaa;padding:10px 14px;border-radius:10px;font-size:13px;cursor:pointer;text-align:left;font-family:inherit;transition:.15s}
+.opt:active{background:rgba(0,255,170,0.15);border-color:#00ffaa}
+#inr{padding:12px;border-top:1px solid rgba(0,255,170,0.1);display:none;gap:8px;align-items:center;flex-shrink:0;background:#070b14}
+#inp{flex:1;background:#1e293b;border:1px solid rgba(0,255,170,0.2);color:#e2e8f0;border-radius:10px;padding:10px 14px;font-size:14px;outline:none;font-family:inherit}
+#inp:focus{border-color:rgba(0,255,170,0.5)}
+#snd{background:#00ffaa;color:#070b14;border:none;border-radius:10px;width:42px;height:42px;font-size:18px;cursor:pointer;flex-shrink:0;font-weight:700}
+</style>
+</head>
+<body>
+<div id="hdr">
+  <a href="/">←</a>
+  <div>
+    <h1>🤖 IA Assistente</h1>
+    <p>● Online agora</p>
+  </div>
+</div>
+<div id="msgs"></div>
+<div id="inr">
+  <input id="inp" placeholder="Digite aqui..."/>
+  <button id="snd">➤</button>
+</div>
+
+<script>
+var cv={},cc=null;
+var M=document.getElementById('msgs');
+var INR=document.getElementById('inr');
+var INP=document.getElementById('inp');
+
+document.getElementById('snd').onclick=send;
+INP.onkeydown=function(e){if(e.key==='Enter')send();};
+
+var F={
+  start:{m:['👋 Olá! Bem-vindo ao IA Iniciantes!','Como posso te ajudar?'],o:[['🎓 Ver os cursos','cursos'],['💰 Planos e preços','precos'],['❓ Dúvidas frequentes','duvidas'],['📞 Falar com Antonio','humano']]},
+  cursos:{m:['📚 8 módulos em português 🇧🇷\n\n🧠 Módulo 1 — O que é IA (GRÁTIS)\n💬 Módulo 2 — ChatGPT (GRÁTIS)\n🖼️ Módulo 3 — IA para imagens\n🎥 Módulo 4 — Vídeo e voz\n⚙️ Módulo 5 — Automação\n💼 Módulo 6 — Negócios\n🛡️ Módulo 7 — Ética\n🔮 Módulo 8 — Futuro da IA'],o:[['💰 Ver preços','precos'],['🚀 Quero me inscrever','cnome'],['🏠 Menu principal','start']]},
+  precos:{m:['💳 Nossos planos:\n\n🆓 GRATUITO\n✅ Módulos 1 e 2\n✅ Comunidade WhatsApp\n✅ Sem cartão\n\n⭐ PREMIUM — R$97/mês\n✅ Todos os 8 módulos\n✅ Suporte direto\n✅ Aulas ao vivo\n✅ Certificado\n✅ Cancele quando quiser'],o:[['🆓 Criar conta grátis','cnome'],['⭐ Assinar Premium agora','premium'],['🏠 Menu principal','start']]},
+  premium:{m:['⭐ Excelente escolha!','Assine agora com segurança:\n👉 https://pay.kiwify.com.br/X9Vt3oL\n\nVocê recebe o acesso imediatamente após o pagamento! 📧'],o:[['🏠 Menu principal','start']]},
+  cnome:{m:['Ótimo! Qual é o seu nome? 😊'],i:['Digite seu nome...','nome','cemail']},
+  cemail:{m:['Qual é o seu e-mail?'],i:['seu@email.com','email','cok']},
+  cok:{m:['✅ Perfeito! Sua conta foi registrada.','Acesse agora e comece de graça:\n👉 https://iainiciantes.com.br\n\nBom aprendizado! 🚀'],o:[['🏠 Menu principal','start']]},
+  duvidas:{m:['❓ Perguntas frequentes:\n\n1️⃣ Preciso de inglês? Não! Tudo em português\n2️⃣ Preciso programar? Não!\n3️⃣ Posso cancelar? Sim, sem multa\n4️⃣ Tem certificado? Sim (Premium)'],o:[['✅ Obrigado!','tchau'],['📞 Falar com Antonio','humano'],['🏠 Menu principal','start']]},
+  humano:{m:['👨‍💼 Fale diretamente com Antonio:','📱 WhatsApp:\nhttps://wa.me/5517981164362\n\n📧 E-mail:\ncontatoiainiciantes@gmail.com\n\nHorário: Seg-Sex, 9h às 18h 😊'],o:[['🏠 Menu principal','start']]},
+  tchau:{m:['😊 Fico feliz em ter ajudado!','Nos vemos na plataforma! 🚀\n👉 iainiciantes.com.br'],o:[['🏠 Menu principal','start']]}
+};
+
+function bot(t){
+  var d=document.createElement('div');
+  d.className='b bot';
+  d.innerHTML=t.replace(/\n/g,'<br>');
+  M.appendChild(d);
+  M.scrollTop=M.scrollHeight;
+}
+
+function usr(t){
+  var d=document.createElement('div');
+  d.className='b usr';
+  d.textContent=t;
+  M.appendChild(d);
+  M.scrollTop=M.scrollHeight;
+}
+
+function opts(list){
+  var old=document.getElementById('OD');
+  if(old)old.remove();
+  var w=document.createElement('div');
+  w.className='opts';w.id='OD';
+  list.forEach(function(o){
+    var b=document.createElement('button');
+    b.className='opt';b.textContent=o[0];
+    b.onclick=function(){
+      w.remove();usr(o[0]);
+      setTimeout(function(){go(o[1]);},200);
+    };
+    w.appendChild(b);
+  });
+  M.appendChild(w);
+  M.scrollTop=M.scrollHeight;
+}
+
+function send(){
+  var v=INP.value.trim();
+  if(!v||!cc)return;
+  usr(v);cv[cc[1]]=v;
+  var n=cc[2];cc=null;
+  INR.style.display='none';INP.value='';
+  setTimeout(function(){go(n);},200);
+}
+
+function go(id){
+  var f=F[id];if(!f)return;
+  var old=document.getElementById('OD');if(old)old.remove();
+  INR.style.display='none';
+  f.m.forEach(function(m){bot(m);});
+  if(f.o) opts(f.o);
+  else if(f.i){
+    cc=f.i;INP.placeholder=f.i[0];INP.value='';
+    INR.style.display='flex';
+    setTimeout(function(){INP.focus();},100);
+  }
+}
+
+go('start');
+</script>
+</body>
+</html>
