@@ -410,7 +410,7 @@
 
     /* ── CHATBOT ─────────────────────────────────────────── */
     .chat-fab {
-      position: fixed; bottom: 90px; right: 24px; z-index: 200;
+      position: fixed; bottom: 156px; right: 24px; z-index: 300;
       background: linear-gradient(135deg,#4f46e5,#7c3aed);
       color: #fff; width: 56px; height: 56px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
@@ -420,7 +420,7 @@
     }
     .chat-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(124,58,237,0.6); }
     .chat-window {
-      position: fixed; bottom: 160px; right: 24px; z-index: 201;
+      position: fixed; bottom: 220px; right: 24px; z-index: 301;
       width: 340px; max-width: calc(100vw - 32px);
       background: #0d1220; border: 1px solid rgba(0,255,170,0.18);
       border-radius: 18px; overflow: hidden;
@@ -994,7 +994,7 @@
 
 
   <!-- CHATBOT -->
-  <button class="chat-fab" onclick="toggleChat()" aria-label="Chat">🤖</button>
+  <button class="chat-fab" id="chatFab" aria-label="Chat">🤖</button>
   <div class="chat-window" id="chatWindow">
     <div class="chat-header">
       <div class="chat-header-info">
@@ -1015,6 +1015,11 @@
 
   <script>
   // ── CHATBOT ENGINE ──────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    var fab = document.getElementById('chatFab');
+    if (fab) fab.addEventListener('click', toggleChat);
+  });
+
   const FLOWS = {
     start: {
       msgs: ["👋 Olá! Bem-vindo ao *IA Iniciantes*!", "Como posso te ajudar hoje?"],
