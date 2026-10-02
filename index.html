@@ -18,6 +18,9 @@
   <meta property="og:description" content="Plataforma brasileira de IA para iniciantes. Do zero ao avançado em português." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://iainiciantes.com.br" />
+  <meta property="og:image" content="https://iainiciantes.com.br/icons/icon-512.png" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <!-- PWA -->
@@ -858,7 +861,7 @@
       // TODO: integrar com webhook / Make / Zapier para adicionar ao CRM
       const waMsg = encodeURIComponent(`Oi! Me chamo ${name} e acabei de criar minha conta gratuita no IA Iniciantes!`);
       setTimeout(() => {
-        window.open(`https://wa.me/5517981164362?text=${waMsg}`, '_blank');
+        window.open(`https://iainiciantes.com.br/chat.html '_blank');
       }, 1200);
     }
   }
